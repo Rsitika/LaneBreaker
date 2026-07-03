@@ -3,15 +3,22 @@
 #include <ctime>
 int main()
 {
-    InitWindow(800, 600, "LaneBreaker");
-    SetTargetFPS(60);
-    srand(time(NULL));
+InitWindow(800, 600, "LaneBreaker");
+SetTargetFPS(60);
+srand(time(NULL));
 
-    int currentLane = 1;
-    int bikeY = 500;
+int currentLane = 1;
+int bikeY = 500;
 
-    int carLane = 0;
-    int carY = -100;
+const int TOTAL_CARS = 3;
+int carLane[TOTAL_CARS];
+int carY[TOTAL_CARS];
+
+for (int i = 0; i < TOTAL_CARS; i++)
+{
+    carLane[i] = rand() % 3;
+    carY[i] = -(i * 250);
+}
 
     bool gameOver = false;
 
@@ -44,20 +51,25 @@ int main()
     }
 
     if (!gameOver){
- // Car Movement
-        carY += 4;
+ for (int i = 0; i < TOTAL_CARS; i++)
+{
+    carY[i] += 4;
 
-        // Respawn
-       if (carY > 600){
-         score++;
-         if(score > highScore)
+    if (carY[i] > 600)
     {
-        highScore = score;
+        score++;
+
+        if (score > highScore)
+        {
+            highScore = score;
+        }
+
+        carY[i] = -(rand() % 300 + 100);
+        carLane[i] = rand() % 3;
     }
-    carY = -100;
-    carLane = rand() % 3;
 }
 }
+
 
 if (gameOver && IsKeyPressed(KEY_R))
 {
@@ -65,10 +77,13 @@ if (gameOver && IsKeyPressed(KEY_R))
 
     currentLane = 1;
     bikeY = 500;
+       score = 0;
 
-    carY = -100;
-    carLane = rand() % 3;
-    score = 0;
+   for (int i = 0; i < TOTAL_CARS; i++){
+    carLane[i] = rand() % 3;
+    carY[i] = -(i * 250);
+}
+ 
 }
 
 Rectangle bikeRect =
@@ -79,37 +94,42 @@ Rectangle bikeRect =
     70
 };
 
-Rectangle carRect =
-{
-    (float)laneX[carLane],
-    (float)carY,
-    40,
-    80
-};
 
-        BeginDrawing();
+BeginDrawing();
 
         ClearBackground(GREEN);
 
         DrawRectangle(100, 0, 600, 600, DARKGRAY);
 
         // Lane Divider 1
-        for (int y = 0; y < 600; y += 60)
-        {
+        for (int y = 0; y < 600; y += 60) {
             DrawRectangle(295, y, 10, 35, WHITE);
         }
 
         // Lane Divider 2
-        for (int y = 0; y < 600; y += 60)
-        {
+        for (int y = 0; y < 600; y += 60){
             DrawRectangle(495, y, 10, 35, WHITE);
         }
 
         // Car
-        DrawRectangle(laneX[carLane], carY, 40, 80, RED);
-       
-       if (CheckCollisionRecs(bikeRect, carRect)){
-    gameOver = true;
+        for (int i = 0; i < TOTAL_CARS; i++){
+    DrawRectangle(laneX[carLane[i]], carY[i], 40, 80, RED);
+}
+      for (int i = 0; i < TOTAL_CARS; i++)
+{
+    Rectangle carRect =
+    {
+        (float)laneX[carLane[i]],
+        (float)carY[i],
+        40,
+        80
+    };
+
+    if (CheckCollisionRecs(bikeRect, carRect))
+    {
+        gameOver = true;
+        break;
+    }
 }
 
         // Bike
