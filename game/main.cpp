@@ -15,6 +15,10 @@ int main()
 
     bool gameOver = false;
 
+    int score = 0;
+
+    int highScore = 0;
+
     int laneX[3] = {180, 380, 580};
 
     while (!WindowShouldClose())
@@ -45,6 +49,11 @@ int main()
 
         // Respawn
        if (carY > 600){
+         score++;
+         if(score > highScore)
+    {
+        highScore = score;
+    }
     carY = -100;
     carLane = rand() % 3;
 }
@@ -59,6 +68,7 @@ if (gameOver && IsKeyPressed(KEY_R))
 
     carY = -100;
     carLane = rand() % 3;
+    score = 0;
 }
 
 Rectangle bikeRect =
@@ -105,12 +115,22 @@ Rectangle carRect =
         // Bike
         DrawRectangle(laneX[currentLane], bikeY, 40, 70, YELLOW);
 
-        DrawText("LaneBreaker", 20, 20, 30, WHITE);
+       DrawText("LaneBreaker", 300, 20, 30, WHITE);
+       DrawText(TextFormat("Score : %i", score), 620, 20, 25, WHITE);
+       DrawText(TextFormat("High Score : %i", highScore),
+         20,
+         90,
+         25,
+         YELLOW);
+     
+       if (gameOver){
+    DrawText("GAME OVER", 220, 220, 50, RED);
 
-        if (gameOver){
-    DrawText("GAME OVER", 220, 250, 50, RED);
-    DrawText("Press R to Restart", 220, 320, 25, WHITE);
+    DrawText(TextFormat("Final Score : %i", score), 220, 290, 30, YELLOW);
+
+    DrawText("Press R to Restart", 220, 340, 25, WHITE);
 }
+
 
 
 
