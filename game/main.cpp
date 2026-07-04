@@ -26,6 +26,8 @@ for (int i = 0; i < TOTAL_CARS; i++)
 
     int highScore = 0;
 
+    int carSpeed = 4;
+
     int laneX[3] = {180, 380, 580};
 
     while (!WindowShouldClose())
@@ -53,7 +55,7 @@ for (int i = 0; i < TOTAL_CARS; i++)
     if (!gameOver){
  for (int i = 0; i < TOTAL_CARS; i++)
 {
-    carY[i] += 4;
+    carY[i] += carSpeed;
 
     if (carY[i] > 600)
     {
@@ -63,6 +65,27 @@ for (int i = 0; i < TOTAL_CARS; i++)
         {
             highScore = score;
         }
+
+        if (score >= 20)
+{
+    carSpeed = 8;
+}
+else if (score >= 15)
+{
+    carSpeed = 7;
+}
+else if (score >= 10)
+{
+    carSpeed = 6;
+}
+else if (score >= 5)
+{
+    carSpeed = 5;
+}
+else
+{
+    carSpeed = 4;
+}
 
         carY[i] = -(rand() % 300 + 100);
         carLane[i] = rand() % 3;
