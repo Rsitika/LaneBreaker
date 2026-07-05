@@ -28,6 +28,8 @@ for (int i = 0; i < TOTAL_CARS; i++)
 
     int carSpeed = 4;
 
+    int roadOffset = 0;
+
     int laneX[3] = {180, 380, 580};
 
     while (!WindowShouldClose())
@@ -53,16 +55,13 @@ for (int i = 0; i < TOTAL_CARS; i++)
     }
 
     if (!gameOver){
- for (int i = 0; i < TOTAL_CARS; i++)
-{
+ for (int i = 0; i < TOTAL_CARS; i++){
     carY[i] += carSpeed;
 
-    if (carY[i] > 600)
-    {
+    if (carY[i] > 600){
         score++;
 
-        if (score > highScore)
-        {
+        if (score > highScore){
             highScore = score;
         }
 
@@ -89,9 +88,16 @@ else
 
         carY[i] = -(rand() % 300 + 100);
         carLane[i] = rand() % 3;
+
+
     }
 }
+roadOffset += carSpeed;
+if (roadOffset >= 60){
+    roadOffset = 0;
 }
+}
+
 
 
 if (gameOver && IsKeyPressed(KEY_R))
@@ -126,12 +132,12 @@ BeginDrawing();
 
         // Lane Divider 1
         for (int y = 0; y < 600; y += 60) {
-            DrawRectangle(295, y, 10, 35, WHITE);
+            DrawRectangle(295, y + roadOffset, 10, 35, WHITE);
         }
 
         // Lane Divider 2
         for (int y = 0; y < 600; y += 60){
-            DrawRectangle(495, y, 10, 35, WHITE);
+            DrawRectangle(495, y + roadOffset, 10, 35, WHITE);
         }
 
         // Car
@@ -165,6 +171,12 @@ BeginDrawing();
          90,
          25,
          YELLOW);
+        
+         DrawText(TextFormat("Speed : %i", carSpeed),
+         20,
+         120,
+         25,
+         ORANGE);
      
        if (gameOver){
     DrawText("GAME OVER", 220, 220, 50, RED);
