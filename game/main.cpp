@@ -1,11 +1,18 @@
 #include "raylib.h"
 #include <cstdlib>
 #include <ctime>
+#include <iostream>
+
 int main()
 {
 InitWindow(800, 600, "LaneBreaker");
 SetTargetFPS(60);
 srand(time(NULL));
+Texture2D bikeTexture = LoadTexture("../assets/motorcycles/motorcycle_yellow.png");
+std::cout << "Texture ID: " << bikeTexture.id << std::endl;
+std::cout << "Width: " << bikeTexture.width << std::endl;
+std::cout << "Height: " << bikeTexture.height << std::endl;
+
 
 int currentLane = 1;
 int bikeY = 500;
@@ -160,9 +167,28 @@ BeginDrawing();
         break;
     }
 }
+Rectangle source = {
+    0,
+    0,
+    (float)bikeTexture.width,
+    (float)bikeTexture.height
+};
 
-        // Bike
-        DrawRectangle(laneX[currentLane], bikeY, 40, 70, YELLOW);
+Rectangle destination = {
+    (float)laneX[currentLane],
+    (float)bikeY,
+    40,
+    80
+};
+
+DrawTexturePro(
+    bikeTexture,
+    source,
+    destination,
+    {20, 40},   // origin = center of 40x80 destination
+    0.0f,
+    WHITE
+);
 
        DrawText("LaneBreaker", 300, 20, 30, WHITE);
        DrawText(TextFormat("Score : %i", score), 620, 20, 25, WHITE);
@@ -191,7 +217,7 @@ BeginDrawing();
 
         EndDrawing();
     }
-
+UnloadTexture(bikeTexture);
     CloseWindow();
 
     return 0;
